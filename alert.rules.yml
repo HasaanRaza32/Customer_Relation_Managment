@@ -1,0 +1,47 @@
+groups:
+  - name: backend_alerts
+    rules:
+      - alert: HighErrorRate
+        expr: rate(http_requests_total{status=~"5.."}[1m]) > 0.05
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "High error rate detected"
+          description: "The error rate is above 5% for the last minute."
+
+      - alert: HighCPUUsage
+        expr: process_cpu_seconds_total > 0.8
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High CPU usage detected"
+          description: "The CPU usage is above 80% for the last 2 minutes."
+
+      - alert: HighMemoryUsage
+        expr: process_resident_memory_bytes > 500000000
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High memory usage detected"
+          description: "The memory usage is above 500MB for the last 2 minutes."
+
+      - alert: HighDiskUsage
+        expr: node_filesystem_usage{fstype!~"tmpfs|overlay"} > 0.9
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "High disk usage detected"
+          description: "The disk usage is above 90% for the last 2 minutes."
+
+      - alert: HighNetworkLatency
+        expr: rate(node_network_receive_errs_total[5m]) > 0
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High network latency detected"
+          description: "Network latency issues detected over the last 5 minutes."
