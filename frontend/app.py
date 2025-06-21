@@ -6,7 +6,55 @@ import os
 # Use 'backend' as the host if running inside Docker Compose, otherwise use 'localhost' if running locally.
 API_URL = os.environ.get("API_URL", "http://backend:8000")
 
+# Simple in-memory user store (for demo only)
+if 'users' not in st.session_state:
+    st.session_state['users'] = {}
+if 'logged_in' not in st.session_state:
+    st.session_state['logged_in'] = False
+if 'current_user' not in st.session_state:
+    st.session_state['current_user'] = None
+
+def login_form():
+    st.subheader("Login")
+    username = st.text_input("Username", key="login_user")
+    password = st.text_input("Password", type="password", key="login_pass")
+    if st.button("Login"):
+        users = st.session_state['users']
+        if username in users and users[username] == password:
+            st.session_state['logged_in'] = True
+            st.session_state['current_user'] = username
+            st.success("Logged in successfully!")
+            st.rerun()
+        else:
+            st.error("Invalid username or password.")
+    st.write("Don't have an account? Sign up below.")
+    signup_form()
+
+def signup_form():
+    st.subheader("Sign Up")
+    new_username = st.text_input("New Username", key="signup_user")
+    new_password = st.text_input("New Password", type="password", key="signup_pass")
+    if st.button("Sign Up"):
+        users = st.session_state['users']
+        if new_username in users:
+            st.error("Username already exists.")
+        elif not new_username or not new_password:
+            st.warning("Please provide both username and password.")
+        else:
+            users[new_username] = new_password
+            st.success("Account created! Please log in.")
+
+if not st.session_state['logged_in']:
+    login_form()
+    st.stop()
+
 st.title("CRM System")
+
+if st.button("Logout"):
+    st.session_state['logged_in'] = False
+    st.session_state['current_user'] = None
+    st.success("Logged out successfully!")
+    st.rerun()
 
 pages = ["Customers", "Orders"]
 page = st.sidebar.selectbox("Select Page", pages)

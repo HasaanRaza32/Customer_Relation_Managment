@@ -58,7 +58,7 @@
       "id": 2,
       "title": "API Request Rate",
       "type": "timeseries",
-      "datasource": { "uid": "prometheus-social-app", "type": "prometheus" },
+      "datasource": "Prometheus",
       "targets": [
         {
           "expr": "sum(rate(http_requests_total{job=\"fastapi-backend\"}[5m]))",
@@ -75,7 +75,7 @@
       "id": 4,
       "title": "API Request Latency (99th Percentile)",
       "type": "timeseries",
-      "datasource": { "uid": "prometheus-social-app", "type": "prometheus" },
+      "datasource": "Prometheus",
       "targets": [
         {
           "expr": "histogram_quantile(0.99, sum(rate(http_requests_latency_seconds_bucket{job=\"fastapi-backend\"}[5m])) by (le))",
@@ -92,7 +92,7 @@
       "id": 6,
       "title": "Requests by Status Code",
       "type": "piechart",
-      "datasource": { "uid": "prometheus-social-app", "type": "prometheus" },
+      "datasource": "Prometheus",
       "targets": [
         {
           "expr": "sum by (status_code) (rate(http_requests_total{job=\"fastapi-backend\"}[5m]))",
@@ -107,7 +107,7 @@
       "id": 8,
       "title": "Requests by Method",
       "type": "piechart",
-      "datasource": { "uid": "prometheus-social-app", "type": "prometheus" },
+      "datasource": "Prometheus",
       "targets": [
         {
           "expr": "sum by (method) (rate(http_requests_total{job=\"fastapi-backend\"}[5m]))",
@@ -122,7 +122,7 @@
       "id": 10,
       "title": "Error Rate (4xx & 5xx)",
       "type": "gauge",
-      "datasource": { "uid": "prometheus-social-app", "type": "prometheus" },
+      "datasource": "Prometheus",
       "targets": [
         {
           "expr": "(sum(rate(http_requests_total{job=\"fastapi-backend\", status_code=~\"[45]..\"}[5m])) / sum(rate(http_requests_total{job=\"fastapi-backend\"}[5m]))) * 100",
